@@ -1,0 +1,19 @@
+
+trigger:
+  branches:
+    include:
+      - main
+
+# 🔴 IMPORTANT CHANGE HERE
+pool:
+  name: Default   # Self-hosted agent pool name
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
+    options: '-Dmaven.test.failure.ignore=true'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    codeCoverageTool: 'JaCoCo'
