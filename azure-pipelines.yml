@@ -16,11 +16,10 @@ steps:
   inputs:
     mavenPomFile: 'pom.xml'  # Path to your pom.xml
     goals: 'clean install'   # Maven command to build your project
-    options: '-X'            # Optional debug flag
+    options: '-X -Dmaven.test.failure.ignore=true'  # Combine options into a single string
     publishJUnitResults: true # Publish JUnit test results
     testResultsFiles: '**/TEST-*.xml'  # Path to test results (JUnit)
     codeCoverageTool: 'JaCoCo' # Optional: Set code coverage tool
-    options: '-Dmaven.test.failure.ignore=true' # Optional: Ignore test failures
 
 # Optional: Deploy to Azure App Service or another target
 - task: AzureWebApp@1
