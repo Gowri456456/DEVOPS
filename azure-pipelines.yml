@@ -1,9 +1,29 @@
 trigger:
-- main
+  branches:
+    include:
+      - main  # Or your desired branch name
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'  # Use the latest Ubuntu image (or choose another image)
 
 steps:
-- script: echo "Hello, Azure DevOps Pipeline is running!"
-  displayName: 'Run first pipeline'
+- task: MavenAuthenticate@0  # Task for authenticating Maven
+  inputs:
+    mavenVersionOption: 'Default'  # Use the default version of Maven
+    cleanLocalRepository: true     # Optionally clean the local repository
+
+- task: Maven@3  # Maven task to run commands
+  inputs:
+    mavenPomFile: 'pom.xml'  # Path to your pom.xml
+    goals: 'clean install'   # Maven command to build your project
+    options: '-X'            # Optional debug flag
+    publishJUnitResults: true # Publish JUnit test results
+    testResultsFiles: '**/TEST-*.xml'  # Path to test results (JUnit)
+    codeCoverageTool: 'JaCoCo' # Optional: Set code coverage tool
+    options: '-Dmaven.test.failure.ignore=true' # Optional: Ignore test failures
+
+# Optional: Deploy to Azure App Service or another target
+- task: AzureWebApp@1
+  inputs:
+    appName: '<your-app-service-name>'
+    package: '$(System.DefaultWorkingDirectory)/**/*.jar'
