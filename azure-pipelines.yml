@@ -25,5 +25,5 @@ steps:
 # Optional: Deploy to Azure App Service or another target
 - task: AzureWebApp@1
   inputs:
-    appName: '<your-app-service-name>'
-    package: '$(System.DefaultWorkingDirectory)/**/*.jar'
+    appName: '<your-app-service-name>'  # Replace with your Azure App Service name
+    package: '$(System.DefaultWorkingDirectory)/**/*.jar'  # Path to your JAR package after build
